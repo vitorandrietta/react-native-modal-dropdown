@@ -169,7 +169,6 @@ export default class ModalDropdown extends Component {
     return (
       <TouchableOpacity ref={button => this._button = button}
                         disabled={disabled}
-                        accessible={accessible}
                         onPress={this._onButtonPress}
       >
         {
@@ -209,16 +208,13 @@ export default class ModalDropdown extends Component {
                onRequestClose={this._onRequestClose}
                supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
         >
-          <TouchableWithoutFeedback accessible={accessible}
-                                    disabled={!showDropdown}
-                                    onPress={this._onModalPress}
-          >
-            <View style={styles.modal}>
+
+            <View style={styles.modal}  disabled={!showDropdown}
+                                    onPress={this._onModalPress}>
               <View style={[styles.dropdown, dropdownStyle, frameStyle]}>
                 {loading ? this._renderLoading() : this._renderDropdown()}
               </View>
             </View>
-          </TouchableWithoutFeedback>
         </Modal>
       );
     }
@@ -303,7 +299,9 @@ export default class ModalDropdown extends Component {
     const key = `row_${index}`;
     const highlighted = index == selectedIndex;
     const row = !renderRow ?
-      (<Text style={[
+      
+      (<TouchableOpacity accessibilityLabel={`${item}`} accessible>
+        <Text style={[
         styles.rowText,
         dropdownTextStyle,
         highlighted && styles.highlightedRowText,
@@ -311,7 +309,9 @@ export default class ModalDropdown extends Component {
       ]}
       >
         {item}
-      </Text>) :
+      </Text>
+      </TouchableOpacity>
+      ) :
       renderRow(rowData, index, highlighted);
     const preservedProps = {
       key,
@@ -357,9 +357,7 @@ export default class ModalDropdown extends Component {
       }
     }
     return (
-      <TouchableHighlight {...preservedProps}>
         {row}
-      </TouchableHighlight>
     );
   };
 
@@ -402,7 +400,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    height: (33 + StyleSheet.hairlineWidth) * 5,
+    height: (33 + StyleSheet.hairlineWidth) * 7,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: 'lightgray',
     borderRadius: 2,
