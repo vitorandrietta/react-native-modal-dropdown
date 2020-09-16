@@ -31,7 +31,7 @@ const TOUCHABLE_ELEMENTS = [
   'TouchableNativeFeedback'
 ];
 
-export default class ModalDropdown extends Component {
+class ModalDropdown extends Component {
   static propTypes = {
     disabled: PropTypes.bool,
     scrollEnabled: PropTypes.bool,
@@ -174,7 +174,7 @@ export default class ModalDropdown extends Component {
         {
           children ||
           (
-            <View style={styles.button}>
+            <View style={styles.button} ref={this.props.ref}>
               <Text style={[styles.buttonText, textStyle]}
                     numberOfLines={1}
               >
@@ -429,3 +429,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray'
   }
 });
+
+
+ModalDropdown.displayName = 'ModalDropdown';
+
+export default React.forwardRef((props, ref) => (
+  <ModalDropdown ref={ref} {...props} />
+));
